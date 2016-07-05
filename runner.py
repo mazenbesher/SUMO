@@ -55,7 +55,8 @@ reg_exp = {
     "local_accident": re.compile("la(\d*) after(\d*)"),
     "temporal_accident": re.compile("ta(\d*) after(\d*) at(\d*)"),
     "resume": re.compile("r(\d*)"),
-    "follow": re.compile("f(\d*)")
+    "follow": re.compile("f(\d*)"),
+    "help": re.compile("(h|help|\?)")
 }
 
 # array to hold temporal accidents
@@ -65,7 +66,8 @@ accidents = []  # (time_s, vehicle_id, distance)
 step = 0
 while step < MAX_STEPS:
     try:
-        command = input("(S)tep, (ID)s , (C)olor, (T)emporal \ (L)ocal (A)ccident, (F)ollow, (C)urrent (S)tep, (R)esume: ")
+        # prompt
+        command = input("%d > " % step)
 
         # check if we need to make an accident
         for acc in accidents:
@@ -73,8 +75,13 @@ while step < MAX_STEPS:
                 accident(acc[1], acc[2])
 
         # ----------------------------------------
+        # help
+        if reg_exp["help"].match(command):
+            print("(S)tep, (ID)s , (C)olor, (T)emporal \ (L)ocal (A)ccident, (F)ollow, (C)urrent (S)tep, (R)esume")
+
+        # ----------------------------------------
         # step x
-        if reg_exp["step"].match(command):
+        elif reg_exp["step"].match(command):
             # ex: s simulate one step
             # ex: s123 simulate till time 123
             match = reg_exp["step"].match(command)
